@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ဝင်ရောက်ရန် နှင့် အကောင့်ဖွင့်ရန်</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
+        body { background: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .login-container { background: white; width: 100%; max-width: 400px; padding: 30px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #1e3a8a; }
+        .logo-area { text-align: center; margin-bottom: 25px; }
+        .logo-area h2 { color: #1e3a8a; font-size: 22px; }
+        .logo-area p { color: #facc15; font-size: 13px; font-weight: bold; margin-top: 5px; }
+        .card-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; text-align: center; }
+        .form-group { margin-bottom: 15px; position: relative; }
+        .form-group i { position: absolute; left: 12px; top: 14px; color: #888; }
+        .form-group input { width: 100%; padding: 12px 12px 12px 38px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; }
+        .form-group input:focus { border-color: #1e3a8a; }
+        .btn { width: 100%; background: #1e3a8a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn:hover { background: #152e72; }
+        .switch-text { text-align: center; margin-top: 15px; font-size: 13px; color: #555; }
+        .switch-text span { color: #1e3a8a; cursor: pointer; font-weight: bold; text-decoration: underline; }
+        .verify-box { background: #eff6ff; border: 1px dashed #3b82f6; padding: 15px; border-radius: 6px; text-align: center; margin-bottom: 15px; display: none; }
+        .code-display { font-size: 24px; font-weight: bold; color: #dc2626; letter-spacing: 5px; margin: 10px 0; background: white; padding: 5px; border-radius: 4px; border: 1px solid #bfdbfe; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo-area">
+            <h2>မျိုးထူး</h2>
+            <p>အိမ်ဆောက်ပစ္စည်းအရောင်းဆိုင်စနစ်</p>
+        </div>
+
+        <div id="loginSection">
+            <div class="card-title">စနစ်ထဲသို့ ဝင်ရောက်ရန်</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="loginEmail" required placeholder="သင့် Email လိပ်စာ ရိုက်ထည့်ပါ">
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="loginPassword" required placeholder="Password ရိုက်ထည့်ပါ">
+                </div>
+                <button type="submit" class="btn">ဝင်ရောက်မည်</button>
+            </form>
+            <div class="switch-text">အကောင့်မရှိသေးပါက? <span onclick="showSection('register')">အကောင့်အသစ်ဖွင့်ရန်</span></div>
+        </div>
+
+        <div id="registerSection" style="display: none;">
+            <div class="card-title">အကောင့်အသစ်ဖွင့်ရန်</div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="regName" required placeholder="အသုံးပြုမည့်အမည် (Username)">
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="regEmail" required placeholder="Email အစစ် ထည့်သွင်းပါ (ဥပမာ- abc@gmail.com)">
+                </div>
+                <div class="form-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="regPassword" required placeholder="Password အသစ်သတ်မှတ်ပါ">
+                </div>
+                <button type="submit" class="btn" style="background: #059669;">အကောင့်ဖွင့်မည်</button>
+            </form>
+            <div class="switch-text">အကောင့်ရှိပြီးသားဖြစ်ပါက? <span onclick="showSection('login')">ပြန်ဝင်ရန်</span></div>
+        </div>
+
+        <div id="verifySection" style="display: none;">
+            <div class="card-title" style="color: #dc2626;">🔐 Email အတည်ပြုချက် ကုဒ်တောင်းခြင်း</div>
+            <p style="font-size: 13px; text-align: center; color: #555; margin-bottom: 10px;">
+                လုံခြုံရေးအရ စနစ်က ထုတ်ပေးလိုက်သော အောက်ပါ အတည်ပြုချက်ကုဒ် ၆ လုံးကို သေချာမှတ်သားပြီး ပြန်ရိုက်ထည့်ပေးပါဗျာ။
+            </p>
+            <div class="verify-box" id="verifyBox">
+                <span style="font-size: 12px; color: #1e3a8a; font-weight: bold;">သင့် Email အတည်ပြုချက်ကုဒ်မှာ -</span>
+                <div class="code-display" id="generatedCode">000000</div>
+            </div>
+            <form id="verifyForm">
+                <div class="form-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="text" id="inputCode" required placeholder="ကုဒ် ၆ လုံး ပြန်ရိုက်ထည့်ပါ" maxlength="6" style="text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 3px;">
+                </div>
+                <button type="submit" class="btn" style="background: #facc15; color: #1e3a8a;">အတည်ပြုချက် တင်သွင်းမည်</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let users = JSON.parse(localStorage.getItem('shop_users')) || [
+            { name: "Admin", email: "admin5@gmail.com", password: "admin" }
+        ];
+        localStorage.setItem('shop_users', JSON.stringify(users));
+
+        let tempUser = null; 
+        let systemGeneratedOTP = ""; 
+
+        function showSection(section) {
+            document.getElementById('loginSection').style.display = section === 'login' ? 'block' : 'none';
+            document.getElementById('registerSection').style.display = section === 'register' ? 'block' : 'none';
+            document.getElementById('verifySection').style.display = section === 'verify' ? 'block' : 'none';
+        }
+
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+
+            const foundUser = users.find(u => u.email === email && u.password === password);
+
+            if (foundUser) {
+                if(foundUser.email === 'admin5@gmail.com') {
+                    localStorage.setItem('currentUser', 'admin');
+                } else {
+                    localStorage.setItem('currentUser', foundUser.name);
+                }
+                localStorage.setItem('isLoggedIn', 'true');
+                alert(`🎉 ဝင်ရောက်မှု အောင်မြင်ပါသည်... ${foundUser.name}`);
+                window.location.href = './dashboard.html';
+            } else {
+                alert("❌ Email (သို့မဟုတ်) Password မှားယွင်းနေပါသည်!");
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const password = document.getElementById('regPassword').value;
+
+            if(!isValidEmail(email)) {
+                return alert("⚠️ ကျေးဇူးပြု၍ တကယ့် Email အစစ် ပုံစံကို ရိုက်ထည့်ပေးပါဗျာ။");
+            }
+            if (email === 'admin5@gmail.com') {
+                return alert("⚠️ ဤ Email သည် ပုံသေ Admin Email ဖြစ်သဖြင့် ထပ်မံအကောင့်ဖွင့်၍မရပါ။ Login စာမျက်နှာတွင် တိုက်ရိုက်ဝင်ရောက်ပါ။");
+            }
+            if (users.some(u => u.email === email)) {
+                return alert("⚠️ ဤ Email လိပ်စာဖြင့် အကောင့်ဖွင့်ထားပြီးသား ဖြစ်နေပါသည်!");
+            }
+
+            systemGeneratedOTP = String(Math.floor(100000 + Math.random() * 900000));
+            tempUser = { name, email, password };
+
+            document.getElementById('generatedCode').innerText = systemGeneratedOTP;
+            document.getElementById('verifyBox').style.display = 'block';
+            showSection('verify');
+        });
+
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputCode = document.getElementById('inputCode').value.trim();
+
+            if (inputCode === systemGeneratedOTP) {
+                users.push(tempUser);
+                localStorage.setItem('shop_users', JSON.stringify(users));
+                alert(`🎉 အကောင့်အသစ် [ ${tempUser.name} ] အား အောင်မြင်စွာ ဖွင့်လှစ်ပြီးပါပြီဗျာ။`);
+                document.getElementById('registerForm').reset();
+                document.getElementById('verifyForm').reset();
+                showSection('login');
+            } else {
+                alert("❌ အတည်ပြုချက်ကုဒ် မမှန်ကန်ပါ။ ပြန်လည်စစ်ဆေးပေးပါဗျာ။");
+            }
+        });
+    </script>
+</body>
+</html>
